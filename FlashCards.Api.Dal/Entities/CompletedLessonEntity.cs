@@ -4,19 +4,21 @@ using FlashCards.Common.Enums;
 
 namespace FlashCards.Api.Dal.Entities;
 
-public class CompletedLessonEntity : IEntity
+public record CompletedLessonEntity : IEntity
 {
-    public Guid Id { get; set; }
-    [Required]
-    public DateTime CreatedDateTime { get; set; }
-    [Required]
-    //It is designed to be used with EnumAbsolvovaneLekceTypOdpovedi
-    public ICollection<int> NumberOfCorrectAnswersByTypes { get; set; } = new List<int>(Enum.GetNames(typeof(EnumCompletedLessonAnswerType)).Length);
+	public Guid Id { get; set; }
+	[Required] public DateTime CreatedDateTime { get; set; }
 
-    [Required]
-    public Guid CardCollectionId { get; set; }
-    [Required]
-    public CardCollectionEntity CardCollection { get; set; } = null!;
-    [Required]
-    public string UserId { get; set; } = null!;
+	// TODO delete this atribute, but its being used in tests
+	[Required]
+	public ICollection<int> NumberOfCorrectAnswersByTypes { get; set; } =
+		new List<int>(Enum.GetNames(typeof(EnumCompletedLessonAnswerType)).Length);
+
+	// ! new atribute instead of the upper one
+	public ICollection<LessonAttemptEntity> LessonAttempts { get; set; } = new List<LessonAttemptEntity>();
+
+	[Required] public Guid CardCollectionId { get; set; }
+	public CardCollectionEntity? CardCollection { get; set; }
+	[Required] public Guid UserId { get; set; }
+	[Required] public UserEntity User { get; set; } = null!;
 }

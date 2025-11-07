@@ -38,7 +38,7 @@ public class SeedData
                     new (JwtClaimTypes.Name, "Jakub Daky"),
                     new (JwtClaimTypes.GivenName, "Jakub"),
                     new (JwtClaimTypes.FamilyName, "Daky"),
-                    new (JwtClaimTypes.Picture, "https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250"),
+                    new (JwtClaimTypes.Picture, "https://encrypted-tbn3.gstatic.com/licensed-image?q=tbn:ANd9GcRdnKLy23zqYgErMEuIhYKTdQEkZBw_qELGZTPfUmAx3B1NnG2ze3bMmQBzYJYl0onCuKGYKeT6V2_4PQwAvHNKdMX43YoeEI0U_LjbQLx0iYaSzgU"),
                     new (JwtClaimTypes.Role, "user"),
                     new (JwtClaimTypes.WebSite, "http://jakub.com"),
                 }).Result;
@@ -71,12 +71,13 @@ public class SeedData
 
                 result = userMgr.AddClaimsAsync(andrej, new Claim[]
                 {
-                    new (JwtClaimTypes.Name, "Andrej Ony"),
-                    new (JwtClaimTypes.GivenName, "Andrej"),
+                    new (JwtClaimTypes.Name, "andrej Ony"),
+                    new (JwtClaimTypes.GivenName, "andrej"),
                     new (JwtClaimTypes.FamilyName, "Ony"),
                     new (JwtClaimTypes.WebSite, "http://andrej.com"),
-                    new (JwtClaimTypes.Picture, "https://robohash.org/mail@ashallendesign.co.uk"),
+                    new (JwtClaimTypes.Picture, "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTw2XDqVGTL5K28a2Lwyi4AJ-JpHpt9994ek4u3cYWnrS9sgR3Yv7XyB5xY_l0Q"),
                     new (JwtClaimTypes.Role, "admin"),
+                    new ("location", "somewhere")
                 }).Result;
                 if (!result.Succeeded)
                 {

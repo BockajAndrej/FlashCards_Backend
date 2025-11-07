@@ -8,12 +8,16 @@ namespace FlashCards.Api.Bl.Mappers;
 
 public class CardCollectionMapperProfile : Profile
 {
-    public CardCollectionMapperProfile()
-    {
-        CreateMap<CompletedLessonEntity, CompletedLessonDetailModel>();
-        CreateMap<CompletedLessonDetailModel, CompletedLessonEntity>();
-        
-        CreateMap<CompletedLessonEntity, CompletedLessonListModel>();
-        CreateMap<CompletedLessonListModel, CompletedLessonEntity>();
-    }
+	public CardCollectionMapperProfile()
+	{
+		CreateMap<CardCollectionEntity, CardCollectionDetailModel>()
+			.ForMember(dest => dest.CreatedById, opt => opt.MapFrom(src => src.CreatedById));
+		CreateMap<CardCollectionDetailModel, CardCollectionEntity>()
+			.ForMember(dest => dest.CreatedById, opt => opt.MapFrom(src => src.CreatedById));
+
+		CreateMap<CardCollectionEntity, CardCollectionListModel>()
+			.ForMember(dest => dest.CreatedById, opt => opt.MapFrom(src => src.CreatedById));
+		CreateMap<CardCollectionListModel, CardCollectionEntity>()
+			.ForMember(dest => dest.CreatedById, opt => opt.MapFrom(src => src.CreatedById));
+	}
 }

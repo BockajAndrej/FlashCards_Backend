@@ -11,6 +11,6 @@ public interface IFacade<TEntity, TListModel, TDetailModel>
         int pageSize = 10);
     public Task<TDetailModel?> GetByIdAsync(Guid id);
     public Task<TDetailModel> SaveAsync(TDetailModel model);
-    public Task<bool> DeleteAsync(Guid entityId);
+    public Task<TDetailModel?> DeleteAsync(Guid entityId);
     public Task<int> GetCountAsync(Expression<Func<TEntity, bool>>? filter = null);
 }

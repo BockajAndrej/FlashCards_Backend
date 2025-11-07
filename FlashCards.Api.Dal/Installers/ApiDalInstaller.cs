@@ -11,4 +11,10 @@ public static class ApiDalInstaller
         services.AddDbContext<FlashCardsDbContext>(opt
             => opt.UseSqlServer(connectionString));
     }
+
+    public static void Install_InMemory(IServiceCollection services, string connectionString)
+    {
+        services.AddDbContext<FlashCardsDbContext>(opt
+            => opt.UseInMemoryDatabase(connectionString));
+    }
 }

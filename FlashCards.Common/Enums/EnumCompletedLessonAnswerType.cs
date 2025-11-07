@@ -2,7 +2,7 @@
 
 public enum EnumCompletedLessonAnswerType
 {
-    Iknow,
-    Idonotknow,
-    Iamnotsure
+	Iknow,
+	Idonotknow,
+	Iamnotsure
 }

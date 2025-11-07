@@ -19,7 +19,7 @@ internal static class HostingExtensions
         builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
-
+        
         builder.Services
             .AddIdentityServer(options =>
             {
@@ -33,7 +33,7 @@ internal static class HostingExtensions
             })
             .AddInMemoryIdentityResources(Config.IdentityResources)
             .AddInMemoryApiScopes(Config.ApiScopes)
-            .AddInMemoryClients(Config.Clients(builder.Configuration))
+            .AddInMemoryClients(Config.Clients(builder))
             .AddAspNetIdentity<ApplicationUser>();
 
         builder.Services.AddAuthentication()

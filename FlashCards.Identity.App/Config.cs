@@ -29,7 +29,7 @@ public static class Config
             }
         };
 
-    public static IEnumerable<Client> Clients(IConfiguration configuration) =>
+    public static IEnumerable<Client> Clients(WebApplicationBuilder configuration) =>
         new Client[]
         {
             // interactive client using code flow + pkce
@@ -43,8 +43,6 @@ public static class Config
                 
                 RedirectUris = { "https://oauth.pstmn.io/v1/callback" },
                 PostLogoutRedirectUris = { "https://oauth.pstmn.io/v1/callback" },
-                // FrontChannelLogoutUri = "https://localhost:44300/signout-oidc",
-                // PostLogoutRedirectUris = { "https://localhost:44300/signout-callback-oidc" },
 
                 AllowOfflineAccess = true,
                 AllowedScopes = { "openid", "profile", "FlashCardsApiScope" }
@@ -57,10 +55,10 @@ public static class Config
                 AllowedGrantTypes = GrantTypes.Code,
                 RequirePkce = true,
                 
-                RedirectUris = { configuration.GetSection("Clients")["RedirectUris"] ?? throw new InvalidOperationException() },
-                PostLogoutRedirectUris = { configuration.GetSection("Clients")["PostLogoutRedirectUris"] ?? throw new InvalidOperationException() },
+                RedirectUris = { configuration.Configuration["Clients:RedirectUris"] ?? throw new InvalidOperationException() },
+                PostLogoutRedirectUris = { configuration.Configuration["Clients:PostLogoutRedirectUris"] ?? throw new InvalidOperationException() },
                 
-                AllowedCorsOrigins = { configuration.GetSection("Clients")["AllowedCorsOrigins"] ?? throw new InvalidOperationException() },
+                AllowedCorsOrigins = { configuration.Configuration["Clients:AllowedCorsOrigins"] ?? throw new InvalidOperationException() },
 
                 AllowOfflineAccess = true,
                 AllowedScopes = { "openid", "profile", "FlashCardsApiScope" }
