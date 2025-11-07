@@ -86,17 +86,16 @@ public abstract class FacadeBase
         return model;
     }
 
-    public async Task<bool> DeleteAsync(Guid entityId)
+    public async Task<TDetailModel?> DeleteAsync(Guid entityId)
     {
         TEntity? entity = await dbContext.Set<TEntity>().FindAsync(entityId);
         if (entity != null)
         {
             dbContext.Remove(entity);
             await dbContext.SaveChangesAsync();
+            return mapper.Map<TEntity, TDetailModel>(entity);
         }
-        else
-            return false;
-        return true;
+        return null;
     }
 
     public async Task<int> GetCountAsync(Expression<Func<TEntity, bool>>? filter = null)

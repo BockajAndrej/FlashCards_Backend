@@ -4,11 +4,13 @@
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <PreserveCompilationContext>true</PreserveCompilationContext>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="AutoMapper" Version="15.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.9" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.8" />
         <PackageReference Include="Microsoft.AspNetCore.OData" Version="9.4.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.6"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
@@ -22,6 +24,7 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
+        <InternalsVisibleTo Include="..\FlashCards.Api.Tests.Integration\FlashCards.Api.Tests.Integration.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -29,4 +32,5 @@
       <ProjectReference Include="..\FlashCards.Api.Dal\FlashCards.Api.Dal.csproj" />
     </ItemGroup>
 
+    
 </Project>

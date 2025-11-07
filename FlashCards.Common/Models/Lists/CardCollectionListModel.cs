@@ -6,12 +6,15 @@ namespace FlashCards.Common.Models.Lists;
 
 public class CardCollectionListModel : IEntityModel
 {
-    public Guid Id { get; set; }
-    [Required]
-    public string Title { get; set; } = null!;
-    public DateTime? StartTimeForAcceptedAnswers { get; set; }
-    public DateTime? EndTimeForAcceptedAnswers { get; set; }
-    public DateTime? LastModifiedDateTime { get; set; }
-    public DateTime? LastPlayedDateTime { get; set; }
-    public string? UserId { get; set; }
+	public Guid Id { get; set; }
+	public string Title { get; set; }
+	public DateTime? StartTimeForAcceptedAnswers { get; set; }
+	public DateTime? EndTimeForAcceptedAnswers { get; set; }
+	public DateTime LastModifiedDateTime { get; set; }
+	public DateTime? LastPlayedDateTime { get; set; }
+
+	public Guid? CreatedById { get; set; }
+	public UserListModel? CreatedBy { get; set; }
+
+	public ICollection<TagListModel> Tags { get; set; } = new List<TagListModel>();
 }

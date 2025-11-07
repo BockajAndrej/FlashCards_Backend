@@ -91,3 +91,5 @@ void UserAuthorization(IApplicationBuilder application)
     application.UseAuthentication();
     application.UseAuthorization();
 }
+
+public partial class Program { }

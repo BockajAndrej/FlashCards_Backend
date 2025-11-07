@@ -5,7 +5,8 @@ using FlashCards.Common.Models.Lists;
 
 namespace FlashCards.Api.Bl.Facades.Interfaces;
 
-public interface ICompletedLessonFacade : IFacade<CompletedLessonEntity, CompletedLessonListModel, CompletedLessonDetailModel>
+public interface
+	ICompletedLessonFacade : IFacade<CompletedLessonEntity, CompletedLessonListModel, CompletedLessonDetailModel>
 {
-    
+	Task<CompletedLessonListModel?> GetLastLessonByCollectionIdAsync(Guid collectionId, string userId);
 }
