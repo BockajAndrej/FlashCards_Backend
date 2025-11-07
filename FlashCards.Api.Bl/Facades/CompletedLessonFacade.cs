@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using FlashCards.Api.Bl.Facades.Interfaces;
 using FlashCards.Api.Dal;
 using FlashCards.Api.Dal.Entities;
@@ -15,18 +16,17 @@ public class CompletedLessonFacade(FlashCardsDbContext dbContext, IMapper mapper
 {
 	public async Task<CompletedLessonListModel?> GetLastLessonByCollectionIdAsync(Guid collectionId, string userId)
 	{
-		var lastLessonEntity = await dbContext.Set<CompletedLessonEntity>()
-			.Include(lesson => lesson.User) 
+		var lastLessonEntity = dbContext.Set<CompletedLessonEntity>()
 			.Where(lesson => lesson.CardCollectionId == collectionId && lesson.User.RealUserUrl == userId)
 			.OrderByDescending(lesson => lesson.CreatedDateTime)
-			.FirstOrDefaultAsync();
+			.ProjectTo<CompletedLessonListModel>(mapper.ConfigurationProvider); 
 
 		if (lastLessonEntity == null)
 		{
 			return null;
 		}
 
-		var result = mapper.Map<CompletedLessonListModel>(lastLessonEntity);
+		var result = await lastLessonEntity.FirstOrDefaultAsync();
 
 		return result;
 	}

@@ -8,6 +8,8 @@ public class CardCollectionListModel : IEntityModel
 {
 	public Guid Id { get; set; }
 	public string Title { get; set; }
+	public string? Description { get; set; }
+
 	public DateTime? StartTimeForAcceptedAnswers { get; set; }
 	public DateTime? EndTimeForAcceptedAnswers { get; set; }
 	public DateTime LastModifiedDateTime { get; set; }
