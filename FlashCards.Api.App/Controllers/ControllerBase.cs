@@ -47,16 +47,16 @@ public abstract class ControllerBase<TEntity, TListModel, TDetailModel>(IFacade<
         // PUT: api/Card/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(Guid id, TDetailModel model)
+        public virtual async Task<IActionResult> Put(Guid id, TDetailModel model)
         {
             if (id != model.Id)
             {
                 return BadRequest();
             }
             
-            await facade.SaveAsync(model);
+            var result = await facade.SaveAsync(model);
             
-            return NoContent();
+            return Ok(result);
         }
 
         // POST: api/Card

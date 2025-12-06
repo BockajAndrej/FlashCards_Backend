@@ -14,6 +14,10 @@ public class CardCollectionListModel : IEntityModel
 	public DateTime? EndTimeForAcceptedAnswers { get; set; }
 	public DateTime LastModifiedDateTime { get; set; }
 	public DateTime? LastPlayedDateTime { get; set; }
+	
+	public string? Note { get; set; }
+	
+	public int NumberOfCards { get; set; }
 
 	public Guid? CreatedById { get; set; }
 	public UserListModel? CreatedBy { get; set; }

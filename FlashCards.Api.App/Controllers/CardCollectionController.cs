@@ -63,6 +63,27 @@ namespace FlashCards.Api.App.Controllers
 
 			return orderBy;
 		}
+		[HttpPut("{id}")]
+		[Authorize]
+		public override async Task<IActionResult> Put(Guid id, CardCollectionDetailModel model)
+		{
+			if (id != model.Id)
+			{
+				return BadRequest();
+			}
+			
+			var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var userModel = await userFacade.GetAsync(l => l.RealUserUrl == userIdString);
+
+			if (!userModel.Any())
+				return BadRequest();
+
+			model.CreatedById = userModel.FirstOrDefault()!.Id;
+			var result = await facade.SaveAsync(model);
+            
+			return Ok(result);
+            
+		}
 
 		[HttpPost]
 		[Authorize]

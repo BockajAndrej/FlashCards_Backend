@@ -14,6 +14,7 @@ public record CardCollectionEntity : IEntity
 	[Required] public DateTime LastModifiedDateTime { get; set; }
 	public DateTime? LastPlayedDateTime { get; set; }
 
+	public string? Note { get; set; }
 
 	[Required] public Guid CreatedById { get; set; }
 	[Required] public UserEntity CreatedBy { get; set; } = null!;

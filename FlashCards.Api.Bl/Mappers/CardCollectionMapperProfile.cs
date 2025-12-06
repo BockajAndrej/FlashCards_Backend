@@ -11,13 +11,13 @@ public class CardCollectionMapperProfile : Profile
 	public CardCollectionMapperProfile()
 	{
 		CreateMap<CardCollectionEntity, CardCollectionDetailModel>()
-			.ForMember(dest => dest.CreatedById, opt => opt.MapFrom(src => src.CreatedById));
-		CreateMap<CardCollectionDetailModel, CardCollectionEntity>()
-			.ForMember(dest => dest.CreatedById, opt => opt.MapFrom(src => src.CreatedById));
+			.ForMember(dest => dest.NumberOfCards,
+				opt => opt.MapFrom(src => src.Cards.Count));
+		CreateMap<CardCollectionDetailModel, CardCollectionEntity>();
 
 		CreateMap<CardCollectionEntity, CardCollectionListModel>()
-			.ForMember(dest => dest.CreatedById, opt => opt.MapFrom(src => src.CreatedById));
-		CreateMap<CardCollectionListModel, CardCollectionEntity>()
-			.ForMember(dest => dest.CreatedById, opt => opt.MapFrom(src => src.CreatedById));
+			.ForMember(dest => dest.NumberOfCards,
+				opt => opt.MapFrom(src => src.Cards.Count));
+		CreateMap<CardCollectionListModel, CardCollectionEntity>();
 	}
 }

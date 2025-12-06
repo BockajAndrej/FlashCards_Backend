@@ -13,6 +13,6 @@ public class UserMapperProfile : Profile
         CreateMap<UserDetailModel, UserEntity>();
         
         CreateMap<UserEntity, UserListModel>();
-        CreateMap<UserListModel, UserDetailModel>();
+        CreateMap<UserListModel, UserEntity>();
     }
 }

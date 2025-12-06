@@ -108,6 +108,7 @@ namespace FlashCards.Api.App.Controllers
 
 			model.UserId = userModel.FirstOrDefault()!.Id;
 			model.Id = Guid.Empty;
+			model.CreatedDateTime = DateTime.Now;
 			var result = await facade.SaveAsync(model);
 			return Ok(result);
 		}
