@@ -7,32 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FlashCards.Api.App.Controllers;
 
-public abstract class ControllerBase<TEntity, TListModel, TDetailModel>(IFacade<TEntity, TListModel, TDetailModel> facade) : Controller where TDetailModel : IEntityModel
+public abstract class ControllerBase<TEntity, TQueryObject, TListModel, TDetailModel>(IFacade<TEntity, TQueryObject, TListModel, TDetailModel> facade) : Controller where TDetailModel : IModel
 {
-    protected char FilterArgumentSpitChar { get; } = ',';
-    protected abstract Expression<Func<TEntity, bool>> CreateFilter(string? strFilterAtrib,
-        string? strFilter);
-    protected abstract Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> CreateOrderBy(string? strSortBy, bool sortDesc);
-    protected Expression<Func<T, bool>> ExpressionAnd<T>(Expression<Func<T, bool>> left, Expression<Func<T, bool>> right)
-    {
-        var invokedExpr = Expression.Invoke(right, left.Parameters.Cast<Expression>());
-        return Expression.Lambda<Func<T, bool>>(Expression.AndAlso(left.Body, invokedExpr), left.Parameters);
-    }
     // GET: api/Card
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TListModel>>> Get(
-        [FromQuery] string? strFilterAtrib,
-        [FromQuery] string? strFilter,
-        [FromQuery] string? strSortBy,
-        [FromQuery] bool sortDesc = false,
-        [FromQuery] int pageNumber = 1,
-        [FromQuery] int pageSize = 10)
+    public async Task<ActionResult<IEnumerable<TListModel>>> Get(TQueryObject queryObject)
     {
-        var filter = CreateFilter(strFilterAtrib, strFilter);
-        
-        var orderBy = CreateOrderBy(strSortBy, sortDesc);
-        
-        var result = await facade.GetAsync(filter, orderBy, pageNumber, pageSize);
+        var result = await facade.GetAsync(queryObject);
         return Ok(result.ToList());
     }
 
@@ -45,14 +26,11 @@ public abstract class ControllerBase<TEntity, TListModel, TDetailModel>(IFacade<
         }
 
         // PUT: api/Card/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public virtual async Task<IActionResult> Put(Guid id, TDetailModel model)
         {
             if (id != model.Id)
-            {
                 return BadRequest();
-            }
             
             var result = await facade.SaveAsync(model);
             
@@ -79,9 +57,9 @@ public abstract class ControllerBase<TEntity, TListModel, TDetailModel>(IFacade<
         }
         
         [HttpGet("count")]
-        public async Task<ActionResult<int>> GetCountAsync([FromQuery] string? strFilterAtrib, [FromQuery] string? strFilter)
+        public async Task<ActionResult<int>> GetCountAsync(TQueryObject queryObject)
         {
-            var result = await facade.GetAsync(filter: CreateFilter(strFilterAtrib, strFilter), pageSize: 1000);
+            var result = await facade.GetAsync(queryObject);
             return result.ToList().Count();
         }
     

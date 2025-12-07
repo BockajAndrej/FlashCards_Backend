@@ -4,7 +4,7 @@ using FlashCards.Common.Models.Interfaces;
 
 namespace FlashCards.Common.Models.Lists;
 
-public class CardCollectionListModel : IEntityModel
+public class CollectionListModel : IModel
 {
 	public Guid Id { get; set; }
 	public string Title { get; set; }

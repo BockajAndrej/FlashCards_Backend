@@ -1,6 +1,6 @@
 ﻿namespace FlashCards.Common.Enums;
 
-public enum EnumCompletedLessonAnswerType
+public enum EnumAnswerType
 {
 	Iknow,
 	Idonotknow,

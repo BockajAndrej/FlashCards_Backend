@@ -6,19 +6,19 @@ using System.Linq;
 
 namespace FlashCards.Api.Bl.Mappers;
 
-public class CompletedLessonMapperProfile : Profile
+public class RecordMapperProfile : Profile
 {
-	public CompletedLessonMapperProfile()
+	public RecordMapperProfile()
 	{
-		CreateMap<CompletedLessonEntity, CompletedLessonListModel>()
+		CreateMap<RecordEntity, RecordListModel>()
 			.ForMember(
 				destination => destination.User,
 				options => options.MapFrom(source => source.User) // Mapujeme priamo objekt
 			);
 
-		CreateMap<CompletedLessonEntity, CompletedLessonDetailModel>();
+		CreateMap<RecordEntity, RecordDetailModel>();
 
-		CreateMap<CompletedLessonListModel, CompletedLessonEntity>()
+		CreateMap<RecordListModel, RecordEntity>()
 			.ForMember(
 				dest => dest.UserId,
 				opt => opt.MapFrom(src =>
@@ -31,6 +31,6 @@ public class CompletedLessonMapperProfile : Profile
 				opt => opt.Ignore()
 			);
 
-		CreateMap<CompletedLessonDetailModel, CompletedLessonEntity>();
+		CreateMap<RecordDetailModel, RecordEntity>();
 	}
 }

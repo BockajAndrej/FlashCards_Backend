@@ -1,12 +1,11 @@
 using FlashCards.Api.Dal.Entities;
-using FlashCards.Api.Dal.Entities.InterfacesOrAbstracts;
 using FlashCards.Common.Models.Details;
 using FlashCards.Common.Models.Lists;
 using FlashCards.Common.QueryObjects;
 
 namespace FlashCards.Api.Bl.Facades.Interfaces;
 
-public interface ITagFacade: IFacade<TagEntity, TagQueryObject, TagListModel, TagDetailModel>
+public interface IAttemptFacade : IFacade<AttemptEntity, AttemptQueryObject, AttemptListModel, AttemptDetailModel>
 {
     
 }

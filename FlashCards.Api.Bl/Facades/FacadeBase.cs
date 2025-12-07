@@ -5,49 +5,34 @@ using FlashCards.Api.Bl.Facades.Interfaces;
 using FlashCards.Api.Dal;
 using FlashCards.Api.Dal.Entities.InterfacesOrAbstracts;
 using FlashCards.Common.Models.Interfaces;
+using FlashCards.Common.QueryObjects.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace FlashCards.Api.Bl.Facades;
 
 public abstract class FacadeBase
-    <TEntity, TListModel, TDetailModel>(FlashCardsDbContext dbContext, IMapper mapper)
-    : IFacade<TEntity, TListModel, TDetailModel>
+    <TEntity, TQueryObject, TListModel, TDetailModel>(FlashCardsDbContext dbContext, IMapper mapper)
+    : IFacade<TEntity, TQueryObject, TListModel, TDetailModel>
     where TEntity : class, IEntity
-    where TDetailModel : class, IEntityModel
+    where TDetailModel : class, IModel
+    where TQueryObject : class, IQueryObject
 {
-    /// <summary>
-    /// Return all filtered and ordered detailModel entities with 
-    /// </summary>
-    /// <param name="filter"></param>   p => p.Price > 100
-    /// <param name="orderBy"></param>  query => query.OrderBy(p => p.Name)
-    /// <param name="pageSize"></param>
-    /// <param name="pageNumber"></param>
-    /// navigation attributes of required entity
-    /// <returns></returns>
-    public async Task<IQueryable<TListModel>> GetAsync(
-        Expression<Func<TEntity, bool>>? filter = null,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        int pageNumber = 1,
-        int pageSize = 10)
+    protected abstract IQueryable<TEntity> CreateFilterQuery(TQueryObject queryObject, IQueryable<TEntity> query);
+    protected abstract IQueryable<TEntity> CreateOrderQuery(TQueryObject queryObject, IQueryable<TEntity> query);
+    protected abstract TEntity SavaDetail(TEntity detail);
+    protected abstract TEntity ModifyDetail(TEntity detail);
+    
+    public async Task<IQueryable<TListModel>> GetAsync(TQueryObject queryObject)
     {
-        // Access to DbSet
         IQueryable<TEntity> query = dbContext.Set<TEntity>();
-
-        if (filter != null)
-            query = query.Where(filter);
-
-        if (orderBy != null)
-            query = orderBy(query);
-        else 
-            query = query.OrderBy(l => l.Id);
         
-        query = query
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize);
+        query = CreateFilterQuery(queryObject, query);
+        query = CreateOrderQuery(queryObject, query);
         
-        IQueryable<TListModel> queryResult = mapper.ProjectTo<TListModel>(query);
+        if(queryObject is { PageNumber: not null, PageSize: not null })
+            query = query.Skip((queryObject.PageNumber.Value - 1) * queryObject.PageSize.Value).Take(queryObject.PageSize.Value);
         
-        return queryResult;
+        return mapper.ProjectTo<TListModel>(query);
     }
 
     public async Task<TDetailModel?> GetByIdAsync(Guid id)
@@ -56,12 +41,7 @@ public abstract class FacadeBase
         var projectedQuery = mapper.ProjectTo<TDetailModel>(query);
         return await projectedQuery.FirstOrDefaultAsync(e => e.Id == id);
     }
-
-    /// <summary>
-    /// Direct access to db only with one query
-    /// </summary>
-    /// <param name="model"></param>
-    /// <returns></returns>
+    
     public async Task<TDetailModel> SaveAsync(TDetailModel model)
     {
         var entity = mapper.Map<TEntity>(model);

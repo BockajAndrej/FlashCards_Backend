@@ -2,13 +2,9 @@
 
 namespace FlashCards.Api.Bl.Facades.Interfaces;
 
-public interface IFacade<TEntity, TListModel, TDetailModel>
+public interface IFacade<TEntity, TQueryObject, TListModel, TDetailModel>
 {
-    public Task<IQueryable<TListModel>> GetAsync(
-        Expression<Func<TEntity, bool>>? filter = null,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        int pageNumber = 1,
-        int pageSize = 10);
+    public Task<IQueryable<TListModel>> GetAsync(TQueryObject queryObject);
     public Task<TDetailModel?> GetByIdAsync(Guid id);
     public Task<TDetailModel> SaveAsync(TDetailModel model);
     public Task<TDetailModel?> DeleteAsync(Guid entityId);

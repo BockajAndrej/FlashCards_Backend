@@ -4,7 +4,7 @@ using FlashCards.Common.Models.Interfaces;
 
 namespace FlashCards.Common.Models.Lists;
 
-public class CardListModel : IEntityModel
+public class CardListModel : IModel
 {
 	public Guid Id { get; set; }
 	[Required] public EnumCardType QuestionTypeEnum { get; set; }

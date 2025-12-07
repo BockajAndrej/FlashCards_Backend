@@ -16,9 +16,9 @@ public record CardEntity : IEntity
 	[Required] public string CorrectAnswer { get; set; } = null!;
 
 	[Required] public DateTime LastModifiedDateTime { get; set; }
-
-	public bool Answered { get; set; }
-
+	
 	[Required] public Guid CardCollectionId { get; set; }
-	[Required] public CardCollectionEntity CardCollection { get; set; } = null!;
+	[Required] public CollectionEntity Collection { get; set; } = null!;
+	
+	public ICollection<AttemptEntity> Attempts { get; set; } = new List<AttemptEntity>();
 }

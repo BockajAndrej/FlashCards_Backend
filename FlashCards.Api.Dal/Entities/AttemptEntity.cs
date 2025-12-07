@@ -4,14 +4,14 @@ using FlashCards.Common.Enums;
 
 namespace FlashCards.Api.Dal.Entities;
 
-public class LessonAttemptEntity : IEntity
+public class AttemptEntity : IEntity
 {
 	public Guid Id { get; set; }
 	[Required] public DateTime AttemptDateTime { get; set; }
-	[Required] public EnumCompletedLessonAnswerType AnswerResultType { get; set; }
+	[Required] public EnumAnswerType AnswerResultType { get; set; }
 
 	[Required] public Guid CompletedLessonId { get; set; }
-	public CompletedLessonEntity CompletedLesson { get; set; } = null!;
+	public RecordEntity Record { get; set; } = null!;
 
 	[Required] public Guid CardId { get; set; }
 	public CardEntity Card { get; set; } = null!;

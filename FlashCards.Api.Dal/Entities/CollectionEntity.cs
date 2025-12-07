@@ -4,7 +4,7 @@ using FlashCards.Common.Enums;
 
 namespace FlashCards.Api.Dal.Entities;
 
-public record CardCollectionEntity : IEntity
+public record CollectionEntity : IEntity
 {
 	public Guid Id { get; set; }
 	[Required] public string Title { get; set; } = null!;
@@ -22,7 +22,7 @@ public record CardCollectionEntity : IEntity
 	[Required] public EnumCardVisibilityType Visibility { get; set; }
 
 	public ICollection<CardEntity> Cards { get; set; } = new List<CardEntity>();
-	public ICollection<CompletedLessonEntity> CompletedLessons { get; set; } = new List<CompletedLessonEntity>();
+	public ICollection<RecordEntity> CompletedLessons { get; set; } = new List<RecordEntity>();
 
-	public ICollection<TagEntity> Tags { get; set; } = new List<TagEntity>();
+	public ICollection<CollectionTagEntity> TagBelong { get; set; } = new List<CollectionTagEntity>();
 }

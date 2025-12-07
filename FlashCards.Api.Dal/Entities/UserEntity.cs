@@ -10,12 +10,10 @@ public record UserEntity : IEntity
 
     public string? Name { get; set; }
     public string? UserImageUrl { get; set; }
-    [Required]
-    public EnumUserRole Role { get; set; }
+    [Required] public EnumUserRole Role { get; set; }
+    [Required] public string RealUserUrl { get; set; } = null!;
     
-    [Required]
-    public string RealUserUrl { get; set; } = null!;
-    
-    public ICollection<CardCollectionEntity> CardCollections { get; set; } = new List<CardCollectionEntity>();
-    public ICollection<CompletedLessonEntity> CompletedLessons { get; set; } = new List<CompletedLessonEntity>();
+    public ICollection<CollectionEntity> Collections { get; set; } = new List<CollectionEntity>();
+    public ICollection<RecordEntity> Records { get; set; } = new List<RecordEntity>();
+    public ICollection<FilterEntity> Filters { get; set; } = new List<FilterEntity>();
 }

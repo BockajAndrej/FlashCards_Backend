@@ -2,7 +2,7 @@
 
 namespace FlashCards.Common.Models.Details;
 
-public class CompletedLessonDetailModel : CompletedLessonListModel
+public class RecordDetailModel : RecordListModel
 {
     
 }

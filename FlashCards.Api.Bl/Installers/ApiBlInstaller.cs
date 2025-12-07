@@ -10,7 +10,7 @@ public static class ApiBlInstaller
     {
         serviceCollection.Scan(selector =>
             selector.FromAssemblyOf<CardFacade>()
-                .AddClasses(classes => classes.AssignableTo(typeof(IFacade<,,>)))
+                .AddClasses(classes => classes.AssignableTo(typeof(IFacade<,,,>)))
                 .AsSelfWithInterfaces()
                 .WithScopedLifetime());
         

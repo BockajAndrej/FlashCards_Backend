@@ -7,5 +7,5 @@ public class CardDetailModel : CardListModel
 {
     [Required]
     public Guid CardCollectionId { get; set; }
-    public CardCollectionListModel? CardCollection { get; set; }
+    public CollectionListModel? CardCollection { get; set; }
 }
