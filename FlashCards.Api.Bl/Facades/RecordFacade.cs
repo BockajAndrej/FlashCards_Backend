@@ -32,9 +32,9 @@ public class RecordFacade(FlashCardsDbContext dbContext, IMapper mapper)
 		return result;
 	}
 
-	protected override IQueryable<RecordEntity> CreateFilterQuery(RecordQueryObject queryObject, IQueryable<RecordEntity> query)
+	protected override Task<IQueryable<RecordEntity>> CreateFilterQuery(RecordQueryObject queryObject, IQueryable<RecordEntity> query)
 	{
-		return query;
+		return Task.FromResult(query);
 	}
 
 	protected override IQueryable<RecordEntity> CreateOrderQuery(RecordQueryObject queryObject, IQueryable<RecordEntity> query)

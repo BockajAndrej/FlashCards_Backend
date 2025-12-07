@@ -13,12 +13,9 @@ public record FilterEntity : IEntity
     public bool IsActive { get; set; }
     
     [Required]
-    public Guid TagId { get; set; }
-    [Required]
-    public TagEntity Tag { get; set; } = null!;
-    
-    [Required]
     public Guid UserId { get; set; }
     [Required]
     public UserEntity User { get; set; } = null!;
+    
+    public ICollection<FilterTagEntity> TagsBelong { get; set; } = new List<FilterTagEntity>();
 }

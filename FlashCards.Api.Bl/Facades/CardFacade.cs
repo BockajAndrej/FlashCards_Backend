@@ -13,9 +13,9 @@ public class CardFacade(FlashCardsDbContext dbContext, IMapper mapper)
 	: FacadeBase<CardEntity, CardQueryObject, CardListModel, CardDetailModel>(dbContext, mapper)
 		, ICardFacade
 {
-	protected override IQueryable<CardEntity> CreateFilterQuery(CardQueryObject queryObject, IQueryable<CardEntity> query)
+	protected override Task<IQueryable<CardEntity>> CreateFilterQuery(CardQueryObject queryObject, IQueryable<CardEntity> query)
 	{
-		return query;
+		return Task.FromResult(query);
 	}
 
 	protected override IQueryable<CardEntity> CreateOrderQuery(CardQueryObject queryObject, IQueryable<CardEntity> query)

@@ -13,9 +13,9 @@ public class TagFacade(FlashCardsDbContext dbContext, IMapper mapper)
 	: FacadeBase<TagEntity, TagQueryObject, TagListModel, TagDetailModel>(dbContext, mapper)
 		, ITagFacade
 {
-	protected override IQueryable<TagEntity> CreateFilterQuery(TagQueryObject queryObject, IQueryable<TagEntity> query)
+	protected override Task<IQueryable<TagEntity>> CreateFilterQuery(TagQueryObject queryObject, IQueryable<TagEntity> query)
 	{
-		return query;
+		return Task.FromResult(query);
 	}
 
 	protected override IQueryable<TagEntity> CreateOrderQuery(TagQueryObject queryObject, IQueryable<TagEntity> query)

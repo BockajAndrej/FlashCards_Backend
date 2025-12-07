@@ -12,9 +12,9 @@ public class AttemptFacade(FlashCardsDbContext dbContext, IMapper mapper)
     : FacadeBase<AttemptEntity, AttemptQueryObject, AttemptListModel, AttemptDetailModel>(dbContext, mapper),
         IAttemptFacade
 {
-    protected override IQueryable<AttemptEntity> CreateFilterQuery(AttemptQueryObject queryObject, IQueryable<AttemptEntity> query)
+    protected override Task<IQueryable<AttemptEntity>> CreateFilterQuery(AttemptQueryObject queryObject, IQueryable<AttemptEntity> query)
     {
-        return query;
+        return Task.FromResult(query);
     }
 
     protected override IQueryable<AttemptEntity> CreateOrderQuery(AttemptQueryObject queryObject, IQueryable<AttemptEntity> query)

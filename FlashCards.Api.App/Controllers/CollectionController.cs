@@ -11,49 +11,64 @@ using Microsoft.Identity.Client;
 
 namespace FlashCards.Api.App.Controllers
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class CollectionController(ICardCollectionFacade facade, IUserFacade userFacade)
-		: ControllerBase<CollectionEntity, CollectionQueryObject, CollectionListModel, CollectionDetailModel>(facade)
-	{
-		[HttpPut("{id}")]
-		[Authorize]
-		public override async Task<IActionResult> Put(Guid id, CollectionDetailModel model)
-		{
-			if (id != model.Id)
-				return BadRequest();
-			
-			var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			if (userIdString == null)
-				return BadRequest();
-			var userModel = await userFacade.GetLocalUserAsync(userIdString);
-			if (userModel == null)
-				return BadRequest();
-			
-			model.CreatedById = userModel.Id;
-			var result = await facade.SaveAsync(model);
-            
-			return Ok(result);
-            
-		}
+    [Route("api/[controller]")]
+    [ApiController]
+    public class CollectionController(ICollectionFacade facade, IUserFacade userFacade)
+        : ControllerBase<CollectionEntity, CollectionQueryObject, CollectionListModel, CollectionDetailModel>(facade)
+    {
+        public override async Task<ActionResult<IEnumerable<CollectionListModel>>> Get(
+            [FromQuery] CollectionQueryObject queryObject)
+        {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userIdString == null)
+                return BadRequest();
+            var userModel = await userFacade.GetLocalUserAsync(userIdString);
+            if (userModel == null)
+                return BadRequest();
 
-		[HttpPost]
-		[Authorize]
-		public override async Task<ActionResult<CollectionDetailModel>> Post(
-			CollectionDetailModel model)
-		{
-			var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			if (userIdString == null)
-				return BadRequest();
-			var userModel = await userFacade.GetLocalUserAsync(userIdString);
-			if (userModel == null)
-				return BadRequest();
+            queryObject.CreatedById = userModel.Id;
 
-			model.CreatedById = userModel.Id;
-			model.Id = Guid.Empty;
+            var result = await facade.GetAsync(queryObject);
+            return Ok(result.ToList());
+        }
 
-			var result = await facade.SaveAsync(model);
-			return Ok(result);
-		}
-	}
+        [HttpPut("{id}")]
+        [Authorize]
+        public override async Task<IActionResult> Put(Guid id, CollectionDetailModel model)
+        {
+            if (id != model.Id)
+                return BadRequest();
+
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userIdString == null)
+                return BadRequest();
+            var userModel = await userFacade.GetLocalUserAsync(userIdString);
+            if (userModel == null)
+                return BadRequest();
+
+            model.CreatedById = userModel.Id;
+            var result = await facade.SaveAsync(model);
+
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public override async Task<ActionResult<CollectionDetailModel>> Post(
+            CollectionDetailModel model)
+        {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userIdString == null)
+                return BadRequest();
+            var userModel = await userFacade.GetLocalUserAsync(userIdString);
+            if (userModel == null)
+                return BadRequest();
+
+            model.CreatedById = userModel.Id;
+            model.Id = Guid.Empty;
+
+            var result = await facade.SaveAsync(model);
+            return Ok(result);
+        }
+    }
 }

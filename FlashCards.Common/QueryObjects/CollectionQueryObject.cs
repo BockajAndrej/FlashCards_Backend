@@ -4,6 +4,7 @@ namespace FlashCards.Common.QueryObjects;
 
 public class CollectionQueryObject : IQueryObject
 {
+    public Guid CreatedById { get; set; }
     public string? Name { get; set; }
     
     public ICollection<Guid>? TagIds { get; set; }

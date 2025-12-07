@@ -3,6 +3,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using FlashCards.Api.Bl.Facades.Interfaces;
 using FlashCards.Api.Dal;
+using FlashCards.Api.Dal.Entities;
 using FlashCards.Api.Dal.Entities.InterfacesOrAbstracts;
 using FlashCards.Common.Models.Interfaces;
 using FlashCards.Common.QueryObjects.Interfaces;
@@ -17,7 +18,7 @@ public abstract class FacadeBase
     where TDetailModel : class, IModel
     where TQueryObject : class, IQueryObject
 {
-    protected abstract IQueryable<TEntity> CreateFilterQuery(TQueryObject queryObject, IQueryable<TEntity> query);
+    protected abstract Task<IQueryable<TEntity>> CreateFilterQuery(TQueryObject queryObject, IQueryable<TEntity> query);
     protected abstract IQueryable<TEntity> CreateOrderQuery(TQueryObject queryObject, IQueryable<TEntity> query);
     protected abstract TEntity SavaDetail(TEntity detail);
     protected abstract TEntity ModifyDetail(TEntity detail);
@@ -26,7 +27,7 @@ public abstract class FacadeBase
     {
         IQueryable<TEntity> query = dbContext.Set<TEntity>();
         
-        query = CreateFilterQuery(queryObject, query);
+        query = await CreateFilterQuery(queryObject, query);
         query = CreateOrderQuery(queryObject, query);
         
         if(queryObject is { PageNumber: not null, PageSize: not null })

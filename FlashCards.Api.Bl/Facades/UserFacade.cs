@@ -11,9 +11,9 @@ namespace FlashCards.Api.Bl.Facades;
 
 public class UserFacade(FlashCardsDbContext dbContext, IMapper mapper) : FacadeBase<UserEntity, UserQueryObject, UserListModel, UserDetailModel>(dbContext, mapper), IUserFacade
 {
-    protected override IQueryable<UserEntity> CreateFilterQuery(UserQueryObject queryObject, IQueryable<UserEntity> query)
+    protected override Task<IQueryable<UserEntity>> CreateFilterQuery(UserQueryObject queryObject, IQueryable<UserEntity> query)
     {
-        return query;
+        return Task.FromResult(query);
     }
 
     protected override IQueryable<UserEntity> CreateOrderQuery(UserQueryObject queryObject, IQueryable<UserEntity> query)

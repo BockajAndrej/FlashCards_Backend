@@ -9,5 +9,5 @@ public record TagEntity : IEntity
 	[Required] public string Name { get; set; } = null!;
 	
 	public ICollection<CollectionTagEntity> CollectionBelong { get; set; } = new List<CollectionTagEntity>();
-	public ICollection<FilterEntity> Filters { get; set; } = new List<FilterEntity>();
+	public ICollection<FilterTagEntity> FiltersBelong { get; set; } = new List<FilterTagEntity>();
 }
