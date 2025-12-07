@@ -15,7 +15,11 @@ public class CollectionFacade(FlashCardsDbContext dbContext, IMapper mapper)
 {
     protected override IQueryable<CollectionEntity> CreateFilterQuery(CollectionQueryObject queryObject, IQueryable<CollectionEntity> query)
     {
-        if (queryObject.TagIds.Any())
+        if (queryObject.Name != null)
+        {
+            query = query.Where(l => l.Title.ToLower().Contains(queryObject.Name.ToLower()));
+        }
+        if (queryObject.TagIds != null && queryObject.TagIds.Any())
         {
             foreach (var queryObjectTagId in queryObject.TagIds)
             {
@@ -27,6 +31,7 @@ public class CollectionFacade(FlashCardsDbContext dbContext, IMapper mapper)
 
     protected override IQueryable<CollectionEntity> CreateOrderQuery(CollectionQueryObject queryObject, IQueryable<CollectionEntity> query)
     {
+        
         return query;
     }
 

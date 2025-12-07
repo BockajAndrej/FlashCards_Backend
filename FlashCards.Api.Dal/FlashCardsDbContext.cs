@@ -9,11 +9,12 @@ public class FlashCardsDbContext(DbContextOptions<FlashCardsDbContext> options) 
 {
 	public DbSet<CardEntity> Card { get; set; }
 	public DbSet<CollectionEntity> Collection { get; set; }
-	public DbSet<RecordEntity> CompletedLesson { get; set; }
+	public DbSet<RecordEntity> Record { get; set; }
 	public DbSet<UserEntity> User { get; set; }
 	public DbSet<TagEntity> Tag { get; set; }
-	public DbSet<AttemptEntity> LessonAttempt { get; set; }
-
+	public DbSet<AttemptEntity> Attempt { get; set; }
+	public DbSet<FilterEntity> Filter { get; set; }
+	public DbSet<CollectionTagEntity> CollectionTag { get; set; }
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{

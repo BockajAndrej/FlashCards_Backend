@@ -11,7 +11,7 @@ public abstract class ControllerBase<TEntity, TQueryObject, TListModel, TDetailM
 {
     // GET: api/Card
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TListModel>>> Get(TQueryObject queryObject)
+    public async Task<ActionResult<IEnumerable<TListModel>>> Get([FromQuery] TQueryObject queryObject)
     {
         var result = await facade.GetAsync(queryObject);
         return Ok(result.ToList());
@@ -57,7 +57,7 @@ public abstract class ControllerBase<TEntity, TQueryObject, TListModel, TDetailM
         }
         
         [HttpGet("count")]
-        public async Task<ActionResult<int>> GetCountAsync(TQueryObject queryObject)
+        public async Task<ActionResult<int>> GetCountAsync([FromQuery] TQueryObject queryObject)
         {
             var result = await facade.GetAsync(queryObject);
             return result.ToList().Count();
