@@ -13,8 +13,8 @@ namespace FlashCards.Api.App.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController(IUserFacade facade)
-        : ControllerBase<UserEntity, UserQueryObject, UserListModel, UserDetailModel>(facade)
+    public class UserController(IUserFacade facade, IUserFacade userFacade)
+        : ControllerBase<UserEntity, UserQueryObject, UserListModel, UserDetailModel>(facade,  userFacade)
     {
     }
 }

@@ -12,7 +12,7 @@ namespace FlashCards.Api.App.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CardController(ICardFacade facade) : ControllerBase<CardEntity, CardQueryObject, CardListModel, CardDetailModel>(facade)
+    public class CardController(ICardFacade facade, IUserFacade userFacade) : ControllerBase<CardEntity, CardQueryObject, CardListModel, CardDetailModel>(facade, userFacade)
     {
         // [Authorize(Policy = "AdminRole")]
         [Authorize]

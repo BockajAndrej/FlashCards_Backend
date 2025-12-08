@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Security.Claims;
 using FlashCards.Api.Bl.Facades.Interfaces;
 using FlashCards.Api.Dal.Entities;
 using FlashCards.Common.Models.Interfaces;
@@ -8,8 +9,20 @@ using Microsoft.AspNetCore.Mvc;
 namespace FlashCards.Api.App.Controllers;
 
 public abstract class ControllerBase<TEntity, TQueryObject, TListModel, TDetailModel>(
-    IFacade<TEntity, TQueryObject, TListModel, TDetailModel> facade) : Controller where TDetailModel : IModel
+    IFacade<TEntity, TQueryObject, TListModel, TDetailModel> facade, IUserFacade userFacade) : Controller where TDetailModel : IModel
 {
+    [NonAction]
+    public async Task<Guid?> GetUserId()
+    {
+        var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userIdString == null)
+            return null;
+        var userModel = await userFacade.GetLocalUserAsync(userIdString);
+        if (userModel == null)
+            return null;
+        
+        return userModel.Id;
+    }
     [HttpGet]
     public virtual async Task<ActionResult<IEnumerable<TListModel>>> Get([FromQuery] TQueryObject queryObject)
     {

@@ -43,15 +43,11 @@ public abstract class FacadeBase
         return await projectedQuery.FirstOrDefaultAsync(e => e.Id == id);
     }
     
-    public async Task<TDetailModel> SaveAsync(TDetailModel model)
+    public virtual async Task<TDetailModel> SaveAsync(TDetailModel model)
     {
         var entity = mapper.Map<TEntity>(model);
-        
-        var idProperty = entity.GetType().GetProperty("Id");
 
-        var idValue = (Guid)(idProperty?.GetValue(entity) ?? throw new InvalidOperationException());
-
-        if (idValue == Guid.Empty)
+        if (entity.Id == Guid.Empty)
         {
             dbContext.Set<TEntity>().Add(entity);
         }

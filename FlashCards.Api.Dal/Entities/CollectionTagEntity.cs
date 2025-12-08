@@ -9,6 +9,6 @@ public record CollectionTagEntity : IEntity
     
     [Required] public Guid TagId { get; set; }
     [Required] public TagEntity Tag { get; set; } = null!;
-    [Required] public Guid CardCollectionId { get; set; }
+    [Required] public Guid CollectionId { get; set; }
     [Required] public CollectionEntity Collection { get; set; } = null!;
 }

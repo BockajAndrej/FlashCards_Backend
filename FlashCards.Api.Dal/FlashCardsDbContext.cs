@@ -15,6 +15,7 @@ public class FlashCardsDbContext(DbContextOptions<FlashCardsDbContext> options) 
 	public DbSet<AttemptEntity> Attempt { get; set; }
 	public DbSet<FilterEntity> Filter { get; set; }
 	public DbSet<CollectionTagEntity> CollectionTag { get; set; }
+	public DbSet<FilterTagEntity> FilterTag { get; set; }
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{

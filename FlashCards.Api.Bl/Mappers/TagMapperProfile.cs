@@ -10,8 +10,15 @@ public class TagMapperProfile : Profile
 {
 	public TagMapperProfile()
 	{
-		CreateMap<TagEntity, TagListModel>().ReverseMap();
-		CreateMap<TagEntity, TagDetailModel>().ReverseMap();
+		CreateMap<TagEntity, TagListModel>();
+		CreateMap<TagListModel, TagEntity>();
+
+		CreateMap<TagEntity, TagDetailModel>()
+			.ForMember(dest => dest.Collections,
+				opt => opt.MapFrom(src => src.CollectionBelong.Select(l => l.Collection)))
+			.ForMember(dest => dest.Filters,
+				opt => opt.MapFrom(src => src.FiltersBelong.Select(l => l.Filter)));
+		CreateMap<TagDetailModel, TagEntity>();
 
 		CreateMap<TagDetailModel, TagListModel>();
 	}

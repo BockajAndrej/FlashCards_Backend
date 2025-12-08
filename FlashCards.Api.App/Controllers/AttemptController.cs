@@ -9,7 +9,7 @@ namespace FlashCards.Api.App.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AttemptController(IAttemptFacade facade) : ControllerBase<AttemptEntity, AttemptQueryObject, AttemptListModel, AttemptDetailModel>(facade)
+public class AttemptController(IAttemptFacade facade, IUserFacade userFacade) : ControllerBase<AttemptEntity, AttemptQueryObject, AttemptListModel, AttemptDetailModel>(facade, userFacade)
 {
     
 }

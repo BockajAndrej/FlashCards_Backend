@@ -14,7 +14,7 @@ namespace FlashCards.Api.App.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class CollectionController(ICollectionFacade facade, IUserFacade userFacade)
-        : ControllerBase<CollectionEntity, CollectionQueryObject, CollectionListModel, CollectionDetailModel>(facade)
+        : ControllerBase<CollectionEntity, CollectionQueryObject, CollectionListModel, CollectionDetailModel>(facade, userFacade)
     {
         public override async Task<ActionResult<IEnumerable<CollectionListModel>>> Get(
             [FromQuery] CollectionQueryObject queryObject)

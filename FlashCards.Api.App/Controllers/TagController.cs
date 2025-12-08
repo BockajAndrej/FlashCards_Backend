@@ -13,8 +13,8 @@ namespace FlashCards.Api.App.Controllers;
 
 [ApiController]
 [Route("api/Tag")]
-public class TagController(ITagFacade facade) 
-    : ControllerBase<TagEntity, TagQueryObject, TagListModel, TagDetailModel>(facade)
+public class TagController(ITagFacade facade, IUserFacade userFacade) 
+    : ControllerBase<TagEntity, TagQueryObject, TagListModel, TagDetailModel>(facade,  userFacade)
 {
     
 }

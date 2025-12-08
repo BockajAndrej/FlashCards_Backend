@@ -14,7 +14,7 @@ namespace FlashCards.Api.App.Controllers
 	[Route("api/[controller]")]
 	[ApiController]
 	public class RecordController(ICompletedLessonFacade facade, IUserFacade userFacade)
-		: ControllerBase<RecordEntity, RecordQueryObject, RecordListModel, RecordDetailModel>(facade)
+		: ControllerBase<RecordEntity, RecordQueryObject, RecordListModel, RecordDetailModel>(facade, userFacade)
 	{
 		[HttpGet("collection/{collectionId:guid}/last")]
 		[Authorize]
