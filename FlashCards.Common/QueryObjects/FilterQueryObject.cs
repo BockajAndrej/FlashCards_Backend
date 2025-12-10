@@ -4,7 +4,7 @@ namespace FlashCards.Common.QueryObjects;
 
 public class FilterQueryObject : IQueryObject
 {
-    public Guid CreatedById { get; set; }
+    public Guid CreatedByIdFilter { get; set; }
     
     public bool? IsActive { get; set; }
     

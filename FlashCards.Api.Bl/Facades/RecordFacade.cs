@@ -34,6 +34,9 @@ public class RecordFacade(FlashCardsDbContext dbContext, IMapper mapper)
 
 	protected override Task<IQueryable<RecordEntity>> CreateFilterQuery(RecordQueryObject queryObject, IQueryable<RecordEntity> query)
 	{
+		if(queryObject.IsCompletedFilter != null)
+			query = query.Where(record => record.IsCompleted == queryObject.IsCompletedFilter);
+		
 		return Task.FromResult(query);
 	}
 

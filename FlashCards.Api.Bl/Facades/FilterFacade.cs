@@ -16,7 +16,7 @@ public class FilterFacade(FlashCardsDbContext dbContext, IMapper mapper)
     protected override Task<IQueryable<FilterEntity>> CreateFilterQuery(FilterQueryObject queryObject,
         IQueryable<FilterEntity> query)
     {
-        query = query.Where(l => l.UserId == queryObject.CreatedById);
+        query = query.Where(l => l.UserId == queryObject.CreatedByIdFilter);
 
         if (queryObject.IsActive.HasValue)
             query = query.Where(l => l.IsActive == queryObject.IsActive.Value);
@@ -47,7 +47,7 @@ public class FilterFacade(FlashCardsDbContext dbContext, IMapper mapper)
         var currentActiveEntity = await dbContext.Set<FilterEntity>()
             .FirstOrDefaultAsync(e => e.IsActive);
 
-        if (currentActiveEntity != null)
+        if (currentActiveEntity != null && currentActiveEntity.Id != entity.Id)
         {
             currentActiveEntity.IsActive = false;
             dbContext.Set<FilterEntity>().Update(currentActiveEntity);

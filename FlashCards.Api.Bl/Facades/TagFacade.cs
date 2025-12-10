@@ -17,6 +17,7 @@ public class TagFacade(FlashCardsDbContext dbContext, IMapper mapper)
     protected override Task<IQueryable<TagEntity>> CreateFilterQuery(TagQueryObject queryObject,
         IQueryable<TagEntity> query)
     {
+        query = query.OrderBy(tag => tag.Name);
         return Task.FromResult(query);
     }
 

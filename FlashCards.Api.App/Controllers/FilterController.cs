@@ -18,7 +18,7 @@ namespace FlashCards.Api.App.Controllers
         {
             var userId = await GetUserId();
             if(userId != null)
-                queryObject.CreatedById = (Guid)userId;
+                queryObject.CreatedByIdFilter = (Guid)userId;
             
             var result = await facade.GetAsync(queryObject);
             return Ok(result.ToList());

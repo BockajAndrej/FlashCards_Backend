@@ -17,7 +17,7 @@ public class CollectionFacade(FlashCardsDbContext dbContext, IMapper mapper, IFi
         IQueryable<CollectionEntity> query)
     {
         FilterQueryObject filterQuery = new FilterQueryObject();
-        filterQuery.CreatedById = queryObject.CreatedById;
+        filterQuery.CreatedByIdFilter = queryObject.CreatedByIdFilter;
         filterQuery.IsActive = true;
         var filterListModelsQueryable = await filterFacade.GetAsync(filterQuery);
         var filterListModels = filterListModelsQueryable.ToList();
@@ -34,15 +34,15 @@ public class CollectionFacade(FlashCardsDbContext dbContext, IMapper mapper, IFi
             }
         }
 
-        query = query.Where(l => l.CreatedById == queryObject.CreatedById);
-        if (queryObject.Name != null)
+        query = query.Where(l => l.CreatedById == queryObject.CreatedByIdFilter);
+        if (queryObject.NameFilter != null)
         {
-            query = query.Where(l => l.Title.ToLower().Contains(queryObject.Name.ToLower()));
+            query = query.Where(l => l.Title.ToLower().Contains(queryObject.NameFilter.ToLower()));
         }
 
-        if (queryObject.TagIds != null && queryObject.TagIds.Any())
+        if (queryObject.TagIdsFilter != null && queryObject.TagIdsFilter.Any())
         {
-            foreach (var queryObjectTagId in queryObject.TagIds)
+            foreach (var queryObjectTagId in queryObject.TagIdsFilter)
             {
                 query = query.Where(l => l.TagBelong.Any(belong => belong.TagId == queryObjectTagId));
             }
@@ -54,6 +54,13 @@ public class CollectionFacade(FlashCardsDbContext dbContext, IMapper mapper, IFi
     protected override IQueryable<CollectionEntity> CreateOrderQuery(CollectionQueryObject queryObject,
         IQueryable<CollectionEntity> query)
     {
+        if (queryObject.NameFilter != null)
+            query = queryObject.IsDescending ? query.OrderByDescending(l => l.Title) : query.OrderBy(l => l.Title);
+        else if(queryObject.RecentOrder != null)
+            query = queryObject.IsDescending
+                ? query.OrderByDescending(l => l.Records.Any() ? l.Records.Max(r => r.CreatedDateTime) : (DateTime?)null)
+                : query.OrderBy(l => l.Records.Any() ? l.Records.Max(r => r.CreatedDateTime) : (DateTime?)null);
+        
         return query;
     }
 

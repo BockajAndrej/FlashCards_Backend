@@ -26,7 +26,7 @@ namespace FlashCards.Api.App.Controllers
             if (userModel == null)
                 return BadRequest();
 
-            queryObject.CreatedById = userModel.Id;
+            queryObject.CreatedByIdFilter = userModel.Id;
 
             var result = await facade.GetAsync(queryObject);
             return Ok(result.ToList());

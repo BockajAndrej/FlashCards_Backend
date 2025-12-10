@@ -22,7 +22,7 @@ public record CollectionEntity : IEntity
 	[Required] public EnumCardVisibilityType Visibility { get; set; }
 
 	public ICollection<CardEntity> Cards { get; set; } = new List<CardEntity>();
-	public ICollection<RecordEntity> CompletedLessons { get; set; } = new List<RecordEntity>();
+	public ICollection<RecordEntity> Records { get; set; } = new List<RecordEntity>();
 
 	public ICollection<CollectionTagEntity> TagBelong { get; set; } = new List<CollectionTagEntity>();
 }
