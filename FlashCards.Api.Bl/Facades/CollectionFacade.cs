@@ -54,7 +54,7 @@ public class CollectionFacade(FlashCardsDbContext dbContext, IMapper mapper, IFi
     protected override IQueryable<CollectionEntity> CreateOrderQuery(CollectionQueryObject queryObject,
         IQueryable<CollectionEntity> query)
     {
-        if (queryObject.NameFilter != null)
+        if (queryObject.NameOrder != null)
             query = queryObject.IsDescending ? query.OrderByDescending(l => l.Title) : query.OrderBy(l => l.Title);
         else if(queryObject.RecentOrder != null)
             query = queryObject.IsDescending
