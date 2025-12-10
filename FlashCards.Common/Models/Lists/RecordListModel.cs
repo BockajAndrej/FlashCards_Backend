@@ -19,5 +19,9 @@ public class RecordListModel : IModel
     
     public int NumberOfAnswers { get; set; }
     
+    public int NumberOfCorrectAnswers { get; set; }
+    public int NumberOfIncorrectAnswers { get; set; }
+    public int NumberOfNotSureAnswers { get; set; }
+    
     public Guid? UserId { get; set; }
 }

@@ -18,6 +18,20 @@ public class RecordFacade(FlashCardsDbContext dbContext, IMapper mapper)
     public async Task<RecordDetailModel?> GetLastRecordByCollectionIdAsync(Guid collectionId, Guid userId)
     {
         var lastRecord = await dbContext.Record
+            .Where(r => r.CardCollectionId == collectionId)
+            .OrderByDescending(r => r.CreatedDateTime)
+            .Include(l => l.Attempts)
+            .FirstOrDefaultAsync();
+
+        if (lastRecord == null)
+            return null;
+
+        return mapper.Map<RecordDetailModel>(lastRecord);
+    }
+    
+    public async Task<RecordDetailModel?> GetActiveRecordByCollectionIdAsync(Guid collectionId, Guid userId)
+    {
+        var lastRecord = await dbContext.Record
             .Where(r => r.CardCollectionId == collectionId && r.IsCompleted == false)
             .OrderByDescending(r => r.CreatedDateTime)
             .FirstOrDefaultAsync();

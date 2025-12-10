@@ -10,4 +10,5 @@ public interface
 	IRecordFacade : IFacade<RecordEntity, RecordQueryObject, RecordListModel, RecordDetailModel>
 {
 	Task<RecordDetailModel?> GetLastRecordByCollectionIdAsync(Guid collectionId, Guid userId);
+	public Task<RecordDetailModel?> GetActiveRecordByCollectionIdAsync(Guid collectionId, Guid userId);
 }

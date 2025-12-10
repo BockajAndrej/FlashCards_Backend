@@ -36,7 +36,7 @@ public class CardFacade(FlashCardsDbContext dbContext, IMapper mapper, RecordFac
 	
 	public async Task<bool?> EnterAnswer(Guid cardId, Guid collectionId, Guid userId, EnumAnswerType answerType)
 	{
-		RecordDetailModel? recordDetailModel = await recordFacade.GetLastRecordByCollectionIdAsync(collectionId, userId);
+		RecordDetailModel? recordDetailModel = await recordFacade.GetActiveRecordByCollectionIdAsync(collectionId, userId);
 		if(recordDetailModel == null)
 			return null;
 

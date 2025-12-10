@@ -31,6 +31,22 @@ namespace FlashCards.Api.App.Controllers
 
 			return Ok(lastLesson);
 		}
+		
+		[HttpGet("collection/{collectionId:guid}/active")]
+		[Authorize]
+		public async Task<ActionResult<RecordDetailModel>> GetActiveForCollection(Guid collectionId)
+		{
+			var userId = await GetUserId();
+			if (userId == null)
+				return Unauthorized();
+
+			var lastLesson = await facade.GetActiveRecordByCollectionIdAsync(collectionId, (Guid)userId);
+
+			if (lastLesson == null)
+				return NotFound();
+
+			return Ok(lastLesson);
+		}
 
 		[HttpPost("StartNewGame")]
 		[Authorize]
