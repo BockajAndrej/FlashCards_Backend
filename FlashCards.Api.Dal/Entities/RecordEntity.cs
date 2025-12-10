@@ -8,6 +8,7 @@ public record RecordEntity : IEntity
 {
 	public Guid Id { get; set; }
 	[Required] public DateTime CreatedDateTime { get; set; }
+	[Required] public DateTime ModifiedDateTime { get; set; }
 	
 	[Required] public Guid CardCollectionId { get; set; }
 	public CollectionEntity? CardCollection { get; set; }

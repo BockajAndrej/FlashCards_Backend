@@ -8,29 +8,17 @@ namespace FlashCards.Api.Bl.Mappers;
 
 public class RecordMapperProfile : Profile
 {
-	public RecordMapperProfile()
-	{
-		CreateMap<RecordEntity, RecordListModel>()
-			.ForMember(
-				destination => destination.User,
-				options => options.MapFrom(source => source.User) // Mapujeme priamo objekt
-			);
+    public RecordMapperProfile()
+    {
+        CreateMap<RecordDetailModel, RecordEntity>();
+        CreateMap<RecordEntity, RecordDetailModel>()
+            .ForMember(dest => dest.NumberOfAnswers,
+                opt => opt.MapFrom(src => src.Attempts.Count));
 
-		CreateMap<RecordEntity, RecordDetailModel>();
-
-		CreateMap<RecordListModel, RecordEntity>()
-			.ForMember(
-				dest => dest.UserId,
-				opt => opt.MapFrom(src =>
-					src.User != null
-						? src.User.Id
-						: Guid.Empty)
-			)
-			.ForMember(
-				dest => dest.User,
-				opt => opt.Ignore()
-			);
-
-		CreateMap<RecordDetailModel, RecordEntity>();
-	}
+        CreateMap<RecordListModel, RecordEntity>();
+        CreateMap<RecordEntity, RecordListModel>()
+            .ForMember(dest => dest.NumberOfAnswers,
+                opt => opt.MapFrom(src => src.Attempts.Count));
+        ;
+    }
 }

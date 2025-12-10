@@ -13,18 +13,18 @@ namespace FlashCards.Api.App.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class RecordController(ICompletedLessonFacade facade, IUserFacade userFacade)
+	public class RecordController(IRecordFacade facade, IUserFacade userFacade)
 		: ControllerBase<RecordEntity, RecordQueryObject, RecordListModel, RecordDetailModel>(facade, userFacade)
 	{
 		[HttpGet("collection/{collectionId:guid}/last")]
 		[Authorize]
-		public async Task<ActionResult<RecordListModel>> GetLastForCollection(Guid collectionId)
+		public async Task<ActionResult<RecordDetailModel>> GetLastForCollection(Guid collectionId)
 		{
-			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			if (string.IsNullOrEmpty(userId))
+			var userId = await GetUserId();
+			if (userId == null)
 				return Unauthorized();
 
-			var lastLesson = await facade.GetLastRecordByCollectionIdAsync(collectionId, userId);
+			var lastLesson = await facade.GetLastRecordByCollectionIdAsync(collectionId, (Guid)userId);
 
 			if (lastLesson == null)
 				return NotFound();
@@ -32,21 +32,39 @@ namespace FlashCards.Api.App.Controllers
 			return Ok(lastLesson);
 		}
 
-		[HttpPost]
+		[HttpPost("StartNewGame")]
 		[Authorize]
-		public override async Task<ActionResult<RecordDetailModel>> Post(
-			RecordDetailModel model)
+		public async Task<ActionResult<RecordDetailModel>> Post(
+			RecordDetailModel model, Guid collectionId)
 		{
-			var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			if (userIdString == null)
-				return BadRequest();
-			var userModel = await userFacade.GetLocalUserAsync(userIdString);
-			if (userModel == null)
-				return BadRequest();
+			var userId = await GetUserId();
+			if (userId == null)
+				return Unauthorized();
 
-			model.UserId = userModel.Id;
 			model.Id = Guid.Empty;
-			model.CreatedDateTime = DateTime.Now;
+			
+			model.UserId = (Guid)userId;
+			model.CardCollectionId = collectionId;
+			
+			var result = await facade.SaveAsync(model);
+			return Ok(result);
+		}
+		
+		[HttpPut("FinishGame")]
+		[Authorize]
+		public async Task<ActionResult<RecordDetailModel>> Put(
+			RecordDetailModel model, Guid collectionId)
+		{
+			var userId = await GetUserId();
+			if (userId == null)
+				return Unauthorized();
+			
+			if(model.Id == Guid.Empty)
+				return BadRequest();
+			
+			model.UserId = (Guid)userId;
+			model.CardCollectionId = collectionId;
+			model.IsCompleted = true;
 			
 			var result = await facade.SaveAsync(model);
 			return Ok(result);

@@ -35,7 +35,7 @@ public class FlashCardsDbContext(DbContextOptions<FlashCardsDbContext> options) 
 		modelBuilder.Entity<AttemptEntity>()
 			.HasOne(la => la.Record)
 			.WithMany(cl => cl.Attempts)
-			.HasForeignKey(la => la.CompletedLessonId)
+			.HasForeignKey(la => la.RecordId)
 			.OnDelete(DeleteBehavior.Restrict);
 	}
 }

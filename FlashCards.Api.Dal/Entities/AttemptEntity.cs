@@ -10,7 +10,7 @@ public class AttemptEntity : IEntity
 	[Required] public DateTime AttemptDateTime { get; set; }
 	[Required] public EnumAnswerType AnswerResultType { get; set; }
 
-	[Required] public Guid CompletedLessonId { get; set; }
+	[Required] public Guid RecordId { get; set; }
 	public RecordEntity Record { get; set; } = null!;
 
 	[Required] public Guid CardId { get; set; }

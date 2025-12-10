@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using System.Security.Claims;
 using FlashCards.Api.Bl.Facades.Interfaces;
 using FlashCards.Api.Dal.Entities;
+using FlashCards.Common.Enums;
 using FlashCards.Common.Models.Details;
 using FlashCards.Common.Models.Lists;
 using FlashCards.Common.QueryObjects;
@@ -16,10 +17,27 @@ namespace FlashCards.Api.App.Controllers
     {
         // [Authorize(Policy = "AdminRole")]
         [Authorize]
+        [HttpPost]
         public override async Task<ActionResult<CardDetailModel>> Post(CardDetailModel model)
         {
             model.Id = Guid.Empty;
             var result = await facade.SaveAsync(model);
+            return Ok(result);
+        }
+        
+        [Authorize]
+        [HttpPost("Answer")]
+        public async Task<ActionResult<bool>> PostAnswer(Guid cardId, Guid collectionId, EnumAnswerType answerType)
+        {
+            var userId = await GetUserId();
+            if(userId == null)
+                return Unauthorized();
+            
+            var result = await facade.EnterAnswer(cardId, collectionId, (Guid)userId, answerType);
+            
+            if(result == null)
+                return NotFound();
+    
             return Ok(result);
         }
     }
