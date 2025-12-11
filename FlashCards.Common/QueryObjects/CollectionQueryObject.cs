@@ -1,4 +1,5 @@
-﻿using FlashCards.Common.QueryObjects.Interfaces;
+﻿using FlashCards.Common.Enums;
+using FlashCards.Common.QueryObjects.Interfaces;
 
 namespace FlashCards.Common.QueryObjects;
 
@@ -6,6 +7,7 @@ public class CollectionQueryObject : IQueryObject
 {
     public Guid CreatedByIdFilter { get; set; }
     public string? NameFilter { get; set; }
+    public EnumCardVisibilityType? VisibilityFilter { get; set; }
     
     public ICollection<Guid>? TagIdsFilter { get; set; }
     

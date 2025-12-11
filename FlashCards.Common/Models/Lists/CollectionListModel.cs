@@ -21,6 +21,9 @@ public class CollectionListModel : IModel
 
 	public Guid? CreatedById { get; set; }
 	public UserListModel? CreatedBy { get; set; }
+	
+	public Guid? GroupId { get; set; }
+	public GroupListModel? Group { get; set; }
 
 	public ICollection<TagListModel> Tags { get; set; } = new List<TagListModel>();
 }

@@ -20,6 +20,9 @@ public record CollectionEntity : IEntity
 	[Required] public UserEntity CreatedBy { get; set; } = null!;
 
 	[Required] public EnumCardVisibilityType Visibility { get; set; }
+	
+	public Guid? GroupId { get; set; }
+	public GroupEntity? Group { get; set; }
 
 	public ICollection<CardEntity> Cards { get; set; } = new List<CardEntity>();
 	public ICollection<RecordEntity> Records { get; set; } = new List<RecordEntity>();

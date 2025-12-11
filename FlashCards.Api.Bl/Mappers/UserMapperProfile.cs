@@ -9,7 +9,9 @@ public class UserMapperProfile : Profile
 {
     public UserMapperProfile()
     {
-        CreateMap<UserEntity, UserDetailModel>();
+        CreateMap<UserEntity, UserDetailModel>()
+            .ForMember(dest => dest.Groups,
+                opt => opt.MapFrom(src => src.UsersBelong.Select(l => l.Group)));
         CreateMap<UserDetailModel, UserEntity>();
         
         CreateMap<UserEntity, UserListModel>();

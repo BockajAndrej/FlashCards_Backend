@@ -2,6 +2,6 @@
 
 public enum EnumUserRole
 {
-    Administrátor,
-    Uzivatel
+    Admin,
+    Member
 }

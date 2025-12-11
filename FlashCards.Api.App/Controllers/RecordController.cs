@@ -51,16 +51,14 @@ namespace FlashCards.Api.App.Controllers
 		[HttpPost("StartNewGame")]
 		[Authorize]
 		public async Task<ActionResult<RecordDetailModel>> Post(
-			RecordDetailModel model, Guid collectionId)
+			RecordDetailModel model)
 		{
 			var userId = await GetUserId();
 			if (userId == null)
 				return Unauthorized();
 
 			model.Id = Guid.Empty;
-			
 			model.UserId = (Guid)userId;
-			model.CardCollectionId = collectionId;
 			
 			var result = await facade.SaveAsync(model);
 			return Ok(result);
@@ -69,7 +67,7 @@ namespace FlashCards.Api.App.Controllers
 		[HttpPut("FinishGame")]
 		[Authorize]
 		public async Task<ActionResult<RecordDetailModel>> Put(
-			RecordDetailModel model, Guid collectionId)
+			RecordDetailModel model)
 		{
 			var userId = await GetUserId();
 			if (userId == null)
@@ -79,7 +77,6 @@ namespace FlashCards.Api.App.Controllers
 				return BadRequest();
 			
 			model.UserId = (Guid)userId;
-			model.CardCollectionId = collectionId;
 			model.IsCompleted = true;
 			
 			var result = await facade.SaveAsync(model);

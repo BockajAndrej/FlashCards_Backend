@@ -10,9 +10,6 @@ public class UserListModel : IModel
 
     public string? Name { get; set; }
     public string? UserImageUrl { get; set; }
-    [Required]
-    public EnumUserRole Role { get; set; }
-    
-    [Required]
-    public string RealUserUrl { get; set; } = null!;
+    public EnumUserRole? Role { get; set; }
+    public string? RealUserUrl { get; set; } = null!;
 }
