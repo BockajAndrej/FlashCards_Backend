@@ -91,8 +91,14 @@ public class RecordFacade(FlashCardsDbContext dbContext, IMapper mapper)
         }
         else
         {
-            entity.ModifiedDateTime = DateTime.Now;
-            dbContext.Set<RecordEntity>().Update(entity);
+             var existingEntity = await dbContext.Set<RecordEntity>().FindAsync(model.Id);
+            
+            if (existingEntity == null)
+                throw new KeyNotFoundException("Record not found");
+            
+            existingEntity.ModifiedDateTime = DateTime.Now;
+
+            dbContext.Set<RecordEntity>().Update(existingEntity);
         }
 
         await dbContext.SaveChangesAsync();
