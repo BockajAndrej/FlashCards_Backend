@@ -18,9 +18,12 @@ namespace FlashCards.Api.App.Controllers
         [HttpGet]
         public override async Task<ActionResult<IEnumerable<GroupListModel>>> Get([FromQuery] GroupQueryObject queryObject)
         {
-            var userId = await GetUserId();
+            var user = await GetLocalUser();
+            if (user == null)
+                return BadRequest();
+
+            var result = await facade.GetAsync(queryObject, user.Id);
             
-            var result = await facade.GetAsync(queryObject);
             return Ok(result.ToList());
         }
         
@@ -41,12 +44,50 @@ namespace FlashCards.Api.App.Controllers
         {
             model.Id = Guid.Empty;
 
-            var userId = await GetUserId();
-            var userListModel = model.Users.FirstOrDefault(l => l.Id == userId);
-            if (userListModel != null) 
-                userListModel.Role = EnumUserRole.Admin;
+            var user = await GetLocalUser();
+            
+            if (user != null)
+                user.Role = EnumUserRole.Admin;
+            else
+                return BadRequest();
+
+            if (model.Users.Any())
+                return BadRequest();
+            
+            model.Users.Add(user);
 
             var result = await facade.SaveAsync(model);
+            return Ok(result);
+        }
+        
+        [HttpPut("JoinToGroup")]
+        public async Task<IActionResult> JoinToGroup(GroupDetailModel model)
+        {
+            var user = await GetLocalUser();
+            
+            if (user != null)
+                user.Role = EnumUserRole.Member;
+            else
+                return BadRequest();
+            
+            model.Users.Add(user);
+
+            var result = await facade.SaveAsync(model);
+
+            return Ok(result);
+        }
+        
+        [HttpPut("LeaveFromGroup")]
+        public async Task<IActionResult> LeaveFromGroup(GroupDetailModel model)
+        {
+            var user = await GetLocalUser();
+            if (user == null)
+                return BadRequest();
+            
+            model.Users.Remove(user);
+
+            var result = await facade.SaveAsync(model);
+
             return Ok(result);
         }
     }

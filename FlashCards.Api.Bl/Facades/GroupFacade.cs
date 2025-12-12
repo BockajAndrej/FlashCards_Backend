@@ -16,6 +16,9 @@ public class GroupFacade(FlashCardsDbContext dbContext, IMapper mapper)
 {
     protected override Task<IQueryable<GroupEntity>> CreateFilterQuery(GroupQueryObject queryObject, IQueryable<GroupEntity> query)
     {
+        if(queryObject.NameFilter != null)
+            query = query.Where(l => l.Name.ToLower().Contains(queryObject.NameFilter.ToLower()));
+        
         return Task.FromResult(query);
     }
 
@@ -32,6 +35,47 @@ public class GroupFacade(FlashCardsDbContext dbContext, IMapper mapper)
     protected override GroupEntity ModifyDetail(GroupEntity detail)
     {
         return detail;
+    }
+    
+    public async Task<IQueryable<GroupListModel>> GetAsync(GroupQueryObject queryObject, Guid userId)
+    {
+        var query = dbContext.Set<GroupEntity>()
+            .Include(g => g.UsersBelong)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(queryObject.NameFilter))
+        {
+            var filter = queryObject.NameFilter.ToLower();
+            query = query.Where(l => l.Name.ToLower().Contains(filter));
+        }
+
+        query = query.OrderBy(l => l.Name);
+
+        if (queryObject is { PageNumber: not null, PageSize: not null })
+        {
+            query = query.Skip((queryObject.PageNumber.Value - 1) * queryObject.PageSize.Value)
+                .Take(queryObject.PageSize.Value);
+        }
+
+        var groupEntities = await query.ToListAsync();
+
+        var groupListModels = mapper.Map<List<GroupListModel>>(groupEntities);
+
+        for (int i = 0; i < groupListModels.Count; i++)
+        {
+            var groupModel = groupListModels[i];
+            var groupEntity = groupEntities[i]; 
+    
+            var userGroupLink = groupEntity.UsersBelong
+                .FirstOrDefault(ug => ug.UserId == userId);
+
+            if (userGroupLink != null) 
+                groupModel.OwnRole = userGroupLink.Role;
+            else
+                groupModel.OwnRole = null;
+        }
+
+        return groupListModels.ToList().AsQueryable();
     }
     
     

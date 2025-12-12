@@ -49,10 +49,12 @@ public abstract class FacadeBase
 
         if (entity.Id == Guid.Empty)
         {
+            SavaDetail(entity);
             dbContext.Set<TEntity>().Add(entity);
         }
         else
         {
+            ModifyDetail(entity);
             dbContext.Set<TEntity>().Update(entity);
         }
 

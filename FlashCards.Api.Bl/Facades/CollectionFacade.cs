@@ -77,11 +77,13 @@ public class CollectionFacade(FlashCardsDbContext dbContext, IMapper mapper, IFi
 
     protected override CollectionEntity SavaDetail(CollectionEntity detail)
     {
+        detail.LastModifiedDateTime = DateTime.Now;
         return detail;
     }
 
     protected override CollectionEntity ModifyDetail(CollectionEntity detail)
     {
+        detail.LastModifiedDateTime = DateTime.Now;
         return detail;
     }
 }

@@ -16,9 +16,9 @@ namespace FlashCards.Api.App.Controllers
         [HttpGet]
         public override async Task<ActionResult<IEnumerable<FilterListModel>>> Get([FromQuery] FilterQueryObject queryObject)
         {
-            var userId = await GetUserId();
-            if(userId != null)
-                queryObject.CreatedByIdFilter = (Guid)userId;
+            var user = await GetLocalUser();
+            if(user != null)
+                queryObject.CreatedByIdFilter = user.Id;
             
             var result = await facade.GetAsync(queryObject);
             return Ok(result.ToList());
@@ -42,9 +42,9 @@ namespace FlashCards.Api.App.Controllers
             model.Id = Guid.Empty;
             model.IsActive = true;
 
-            var userId = await GetUserId();
-            if(userId != null)
-                model.UserId = (Guid)userId;
+            var user = await GetLocalUser();
+            if(user != null)
+                model.UserId = user.Id;
             
             var result = await facade.SaveAsync(model);
             return Ok(result);

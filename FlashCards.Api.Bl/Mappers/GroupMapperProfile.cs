@@ -12,9 +12,13 @@ public class GroupMapperProfile :  Profile
         CreateMap<GroupDetailModel, GroupEntity>();
         CreateMap<GroupEntity, GroupDetailModel>()
             .ForMember(dest => dest.Users,
-                opt => opt.MapFrom(src => src.UsersBelong.Select(l => l.User)));
+                opt => opt.MapFrom(src => src.UsersBelong.Select(l => l.User)))
+            .ForMember(dest => dest.NumberOfMembers,
+                opt => opt.MapFrom(src => src.UsersBelong.Count));
 
         CreateMap<GroupListModel, GroupEntity>();
-        CreateMap<GroupEntity, GroupListModel>();
+        CreateMap<GroupEntity, GroupListModel>()
+            .ForMember(dest => dest.NumberOfMembers,
+                opt => opt.MapFrom(src => src.UsersBelong.Count));
     }
 }

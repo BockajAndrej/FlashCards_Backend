@@ -20,11 +20,11 @@ namespace FlashCards.Api.App.Controllers
 		[Authorize]
 		public async Task<ActionResult<RecordDetailModel>> GetLastForCollection(Guid collectionId)
 		{
-			var userId = await GetUserId();
-			if (userId == null)
+			var user = await GetLocalUser();
+			if (user == null)
 				return Unauthorized();
 
-			var lastLesson = await facade.GetLastRecordByCollectionIdAsync(collectionId, (Guid)userId);
+			var lastLesson = await facade.GetLastRecordByCollectionIdAsync(collectionId, user.Id);
 
 			if (lastLesson == null)
 				return NotFound();
@@ -36,11 +36,11 @@ namespace FlashCards.Api.App.Controllers
 		[Authorize]
 		public async Task<ActionResult<RecordDetailModel>> GetActiveForCollection(Guid collectionId)
 		{
-			var userId = await GetUserId();
-			if (userId == null)
+			var user = await GetLocalUser();
+			if (user == null)
 				return Unauthorized();
 
-			var lastLesson = await facade.GetActiveRecordByCollectionIdAsync(collectionId, (Guid)userId);
+			var lastLesson = await facade.GetActiveRecordByCollectionIdAsync(collectionId, user.Id);
 
 			if (lastLesson == null)
 				return NotFound();
@@ -53,12 +53,12 @@ namespace FlashCards.Api.App.Controllers
 		public async Task<ActionResult<RecordDetailModel>> Post(
 			RecordDetailModel model)
 		{
-			var userId = await GetUserId();
-			if (userId == null)
+			var user = await GetLocalUser();
+			if (user == null)
 				return Unauthorized();
 
 			model.Id = Guid.Empty;
-			model.UserId = (Guid)userId;
+			model.UserId = user.Id;
 			
 			var result = await facade.SaveAsync(model);
 			return Ok(result);
@@ -69,14 +69,14 @@ namespace FlashCards.Api.App.Controllers
 		public async Task<ActionResult<RecordDetailModel>> Put(
 			RecordDetailModel model)
 		{
-			var userId = await GetUserId();
-			if (userId == null)
+			var user = await GetLocalUser();
+			if (user == null)
 				return Unauthorized();
 			
-			if(model.Id == Guid.Empty)
+			if(model.Id == Guid.Empty || model.CardCollectionId == Guid.Empty)
 				return BadRequest();
 			
-			model.UserId = (Guid)userId;
+			model.UserId = user.Id;
 			model.IsCompleted = true;
 			
 			var result = await facade.SaveAsync(model);

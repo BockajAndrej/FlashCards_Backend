@@ -29,11 +29,11 @@ namespace FlashCards.Api.App.Controllers
         [HttpPost("Answer")]
         public async Task<ActionResult<bool>> PostAnswer(Guid cardId, Guid collectionId, EnumAnswerType answerType)
         {
-            var userId = await GetUserId();
-            if(userId == null)
+            var user = await GetLocalUser();
+            if(user == null)
                 return Unauthorized();
             
-            var result = await facade.EnterAnswer(cardId, collectionId, (Guid)userId, answerType);
+            var result = await facade.EnterAnswer(cardId, collectionId, user.Id, answerType);
             
             if(result == null)
                 return NotFound();

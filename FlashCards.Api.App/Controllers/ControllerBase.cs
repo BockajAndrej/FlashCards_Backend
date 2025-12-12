@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using FlashCards.Api.Bl.Facades.Interfaces;
 using FlashCards.Api.Dal.Entities;
+using FlashCards.Common.Models.Details;
 using FlashCards.Common.Models.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,7 @@ public abstract class ControllerBase<TEntity, TQueryObject, TListModel, TDetailM
     IFacade<TEntity, TQueryObject, TListModel, TDetailModel> facade, IUserFacade userFacade) : Controller where TDetailModel : IModel
 {
     [NonAction]
-    public async Task<Guid?> GetUserId()
+    public async Task<UserDetailModel?> GetLocalUser()
     {
         var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (userIdString == null)
@@ -21,7 +22,7 @@ public abstract class ControllerBase<TEntity, TQueryObject, TListModel, TDetailM
         if (userModel == null)
             return null;
         
-        return userModel.Id;
+        return userModel;
     }
     [HttpGet]
     public virtual async Task<ActionResult<IEnumerable<TListModel>>> Get([FromQuery] TQueryObject queryObject)
@@ -31,7 +32,7 @@ public abstract class ControllerBase<TEntity, TQueryObject, TListModel, TDetailM
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<TDetailModel>> Get(Guid id)
+    public virtual async Task<ActionResult<TDetailModel>> Get(Guid id)
     {
         var cardEntity = await facade.GetByIdAsync(id);
         return Ok(cardEntity);
@@ -57,7 +58,7 @@ public abstract class ControllerBase<TEntity, TQueryObject, TListModel, TDetailM
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
+    public virtual async Task<IActionResult> Delete(Guid id)
     {
         var result = await facade.DeleteAsync(id);
         if (result != null)
