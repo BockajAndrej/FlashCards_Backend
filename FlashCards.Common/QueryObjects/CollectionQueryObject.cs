@@ -9,6 +9,8 @@ public class CollectionQueryObject : IQueryObject
     public string? NameFilter { get; set; }
     public EnumCardVisibilityType? VisibilityFilter { get; set; }
     
+    public bool OwnCollectionFilter { get; set; }
+    
     public ICollection<Guid>? TagIdsFilter { get; set; }
     
     

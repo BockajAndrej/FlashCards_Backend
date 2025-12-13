@@ -22,7 +22,7 @@ public class CollectionFacade(FlashCardsDbContext dbContext, IMapper mapper, IFi
         filterQuery.IsActive = true;
         var filterListModelsQueryable = await filterFacade.GetAsync(filterQuery);
         var filterListModels = filterListModelsQueryable.ToList();
-
+        
         if (filterListModels.Any())
         {
             var tagListModels = filterListModels.FirstOrDefault()?.Tags;
@@ -35,10 +35,15 @@ public class CollectionFacade(FlashCardsDbContext dbContext, IMapper mapper, IFi
             }
         }
 
+        if (queryObject.OwnCollectionFilter)
+        {
+            query = query.Where(l => l.CreatedById == queryObject.CreatedByIdFilter);
+        }
+
         if (queryObject.VisibilityFilter.HasValue)
         {
             if(queryObject.VisibilityFilter == EnumCardVisibilityType.Private)
-                query = query.Where(l => l.CreatedById == queryObject.CreatedByIdFilter);
+                query = query.Where(l => l.Visibility == EnumCardVisibilityType.Private);
             else if (queryObject.VisibilityFilter == EnumCardVisibilityType.Public)
                 query = query.Where(l => l.Visibility == EnumCardVisibilityType.Public);
         }

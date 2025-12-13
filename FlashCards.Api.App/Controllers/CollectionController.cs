@@ -3,6 +3,7 @@ using System.Security.Claims;
 using FlashCards.Api.Bl.Facades.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using FlashCards.Api.Dal.Entities;
+using FlashCards.Common.Enums;
 using FlashCards.Common.Models.Details;
 using FlashCards.Common.Models.Lists;
 using FlashCards.Common.QueryObjects;
@@ -19,17 +20,22 @@ namespace FlashCards.Api.App.Controllers
         public override async Task<ActionResult<IEnumerable<CollectionListModel>>> Get(
             [FromQuery] CollectionQueryObject queryObject)
         {
-            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userIdString == null)
-                return BadRequest();
-            var userModel = await userFacade.GetLocalUserAsync(userIdString);
-            if (userModel == null)
-                return BadRequest();
+            var user = await GetLocalUser();
 
-            queryObject.CreatedByIdFilter = userModel.Id;
-
+            if (user == null)
+                return BadRequest();
+            
+            queryObject.CreatedByIdFilter = user.Id;
+            
             var result = await facade.GetAsync(queryObject);
-            return Ok(result.ToList());
+
+            foreach (var collectionListModel in result)
+            {
+                if (collectionListModel.CreatedById != user.Id && user.Role != EnumUserRole.Admin)
+                    return Unauthorized();
+            }
+            
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
@@ -39,14 +45,13 @@ namespace FlashCards.Api.App.Controllers
             if (id != model.Id)
                 return BadRequest();
 
-            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userIdString == null)
-                return BadRequest();
-            var userModel = await userFacade.GetLocalUserAsync(userIdString);
-            if (userModel == null)
+            var user = await GetLocalUser();
+            if (user == null)
                 return BadRequest();
 
-            model.CreatedById = userModel.Id;
+            if (model.CreatedById != user.Id && user.Role != EnumUserRole.Admin)
+                return Unauthorized();
+            
             var result = await facade.SaveAsync(model);
 
             return Ok(result);
