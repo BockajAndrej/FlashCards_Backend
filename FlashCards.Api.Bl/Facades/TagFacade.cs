@@ -17,12 +17,13 @@ public class TagFacade(FlashCardsDbContext dbContext, IMapper mapper)
     protected override Task<IQueryable<TagEntity>> CreateFilterQuery(TagQueryObject queryObject,
         IQueryable<TagEntity> query)
     {
-        query = query.OrderBy(tag => tag.Name);
+        query = query.Where(l => l.UserId == queryObject.CreatedByIdFilter);
         return Task.FromResult(query);
     }
 
     protected override IQueryable<TagEntity> CreateOrderQuery(TagQueryObject queryObject, IQueryable<TagEntity> query)
     {
+        query = query.OrderBy(tag => tag.Name);
         return query;
     }
 

@@ -8,6 +8,11 @@ public record TagEntity : IEntity
 	public Guid Id { get; set; }
 	[Required] public string Name { get; set; } = null!;
 	
+	[Required]
+	public Guid UserId { get; set; }
+	[Required]
+	public UserEntity User { get; set; } = null!;
+	
 	public ICollection<CollectionTagEntity> CollectionBelong { get; set; } = new List<CollectionTagEntity>();
 	public ICollection<FilterTagEntity> FiltersBelong { get; set; } = new List<FilterTagEntity>();
 }

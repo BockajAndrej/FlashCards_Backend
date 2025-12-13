@@ -82,13 +82,11 @@ namespace FlashCards.Api.App.Controllers
         {
             var user = await GetLocalUser();
             if (user == null)
-                return BadRequest();
-            
-            model.Users.Remove(user);
+                return BadRequest("User not found");
 
-            var result = await facade.SaveAsync(model);
+            await facade.RemoveUserFromGroupAsync(model.Id, user.Id);
 
-            return Ok(result);
+            return Ok();
         }
     }
 }

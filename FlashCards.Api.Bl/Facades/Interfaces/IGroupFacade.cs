@@ -8,4 +8,5 @@ namespace FlashCards.Api.Bl.Facades.Interfaces;
 public interface IGroupFacade : IFacade<GroupEntity, GroupQueryObject, GroupListModel, GroupDetailModel>
 {
     public Task<IQueryable<GroupListModel>> GetAsync(GroupQueryObject queryObject, Guid userId);
+    public Task RemoveUserFromGroupAsync(Guid groupId, Guid userId);
 }

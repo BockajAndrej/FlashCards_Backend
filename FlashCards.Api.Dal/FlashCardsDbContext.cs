@@ -39,5 +39,11 @@ public class FlashCardsDbContext(DbContextOptions<FlashCardsDbContext> options) 
 			.WithMany(cl => cl.Attempts)
 			.HasForeignKey(la => la.RecordId)
 			.OnDelete(DeleteBehavior.Restrict);
+		
+		modelBuilder.Entity<TagEntity>()
+			.HasOne(la => la.User)
+			.WithMany(cl => cl.Tags)
+			.HasForeignKey(la => la.UserId)
+			.OnDelete(DeleteBehavior.Restrict);
 	}
 }

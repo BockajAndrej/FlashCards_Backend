@@ -107,41 +107,47 @@ public class GroupFacade(FlashCardsDbContext dbContext, IMapper mapper)
                 .FirstOrDefaultAsync(g => g.Id == entity.Id);
 
             if (existingGroup == null)
-            {
-                throw new InvalidOperationException($"Group s ID {entity.Id} was not found.");
-            }
+                throw new InvalidOperationException($"Group s ID {entity.Id} neexistuje.");
 
             dbContext.Entry(existingGroup).CurrentValues.SetValues(entity);
 
-            var incomingUserModelIds = model.Users
-                .Select(userModel => userModel.Id)
+            var incomingUserIds = model.Users
+                .Select(u => u.Id)
                 .ToHashSet();
 
             var usersToRemove = existingGroup.UsersBelong
-                .Where(gu => !incomingUserModelIds.Contains(gu.UserId))
+                .Where(gu => !incomingUserIds.Contains(gu.UserId))
                 .ToList();
 
-            dbContext.Set<GroupUserEntity>().RemoveRange(usersToRemove);
-
-            var existingUserIds = existingGroup.UsersBelong.Select(gu => gu.UserId).ToHashSet();
-
-            foreach (var incomingUser in model.Users)
+            foreach (var removeUser in usersToRemove)
             {
-                if (existingUserIds.Contains(incomingUser.Id))
-                {
-                    var existingJoinEntity = existingGroup.UsersBelong
-                        .First(gu => gu.UserId == incomingUser.Id);
+                existingGroup.UsersBelong.Remove(removeUser);
+            }
 
-                    if (existingJoinEntity.Role != incomingUser.Role)
-                        existingJoinEntity.Role = incomingUser.Role ??  EnumUserRole.Member;
+            var existingUserIds = existingGroup.UsersBelong
+                .Select(gu => gu.UserId)
+                .ToHashSet();
+
+            foreach (var incoming in model.Users)
+            {
+                if (existingUserIds.Contains(incoming.Id))
+                {
+                    var existing = existingGroup.UsersBelong
+                        .First(gu => gu.UserId == incoming.Id);
+
+                    var newRole = incoming.Role ?? EnumUserRole.Member;
+                    if (existing.Role != newRole)
+                    {
+                        existing.Role = newRole;
+                    }
                 }
                 else
                 {
                     existingGroup.UsersBelong.Add(new GroupUserEntity
                     {
                         GroupId = existingGroup.Id,
-                        UserId = incomingUser.Id,
-                        Role = incomingUser.Role ?? EnumUserRole.Member
+                        UserId = incoming.Id,
+                        Role = incoming.Role ?? EnumUserRole.Member
                     });
                 }
             }
@@ -153,4 +159,23 @@ public class GroupFacade(FlashCardsDbContext dbContext, IMapper mapper)
 
         return model;
     }
+    
+    public async Task RemoveUserFromGroupAsync(Guid groupId, Guid userId)
+    {
+        var group = await dbContext.Set<GroupEntity>()
+            .Include(g => g.UsersBelong)
+            .FirstOrDefaultAsync(g => g.Id == groupId);
+
+        if (group == null)
+            throw new KeyNotFoundException("Group not found");
+
+        var membership = group.UsersBelong.FirstOrDefault(gu => gu.UserId == userId);
+
+        if (membership != null)
+        {
+            group.UsersBelong.Remove(membership);
+            await dbContext.SaveChangesAsync();
+        }
+    }
+
 }

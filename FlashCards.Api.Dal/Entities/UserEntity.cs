@@ -18,4 +18,6 @@ public record UserEntity : IEntity
     public ICollection<RecordEntity> Records { get; set; } = new List<RecordEntity>();
     public ICollection<FilterEntity> Filters { get; set; } = new List<FilterEntity>();
     public ICollection<GroupUserEntity> UsersBelong { get; set; } = new List<GroupUserEntity>();
+    
+    public ICollection<TagEntity> Tags { get; set; } = new List<TagEntity>();
 }
