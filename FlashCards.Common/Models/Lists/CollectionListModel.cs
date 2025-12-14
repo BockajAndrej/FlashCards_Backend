@@ -17,6 +17,8 @@ public class CollectionListModel : IModel
 	
 	public string? Note { get; set; }
 	
+	public EnumCardVisibilityType Visibility { get; set; }
+	
 	public int NumberOfCards { get; set; }
 
 	public Guid? CreatedById { get; set; }
