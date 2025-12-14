@@ -5,6 +5,9 @@ namespace FlashCards.Common.QueryObjects;
 public class RecordQueryObject  : IQueryObject
 {
     public bool? IsCompletedFilter { get; set; }
+    public Guid? CreatedUserId { get; set; }
+    public Guid? CardCollectionIdFilter { get; set; }
+    
     
     public bool IsDescending { get; set; }
     public int? PageNumber { get; set; }
