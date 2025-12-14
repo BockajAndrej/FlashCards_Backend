@@ -45,7 +45,7 @@ public class FilterFacade(FlashCardsDbContext dbContext, IMapper mapper)
         var entity = mapper.Map<FilterEntity>(model);
 
         var currentActiveEntity = await dbContext.Set<FilterEntity>()
-            .FirstOrDefaultAsync(e => e.IsActive);
+            .FirstOrDefaultAsync(e => e.IsActive && e.UserId == model.UserId);
 
         if (currentActiveEntity != null && currentActiveEntity.Id != entity.Id)
         {

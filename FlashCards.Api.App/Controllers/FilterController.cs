@@ -49,5 +49,22 @@ namespace FlashCards.Api.App.Controllers
             var result = await facade.SaveAsync(model);
             return Ok(result);
         }
+        
+        [HttpGet("GetActiveFilter")]
+        public async Task<ActionResult<FilterListModel>> GetActiveFilter()
+        {
+            var user = await GetLocalUser();
+            
+            if(user == null)
+                return Unauthorized();
+            
+            FilterQueryObject queryObject = new FilterQueryObject();
+            queryObject.CreatedByIdFilter = user.Id;
+            queryObject.IsActive = true;
+            
+            var result = await facade.GetAsync(queryObject);
+            
+            return Ok(result.FirstOrDefault());
+        }
     }
 }

@@ -39,6 +39,10 @@ public class CollectionFacade(FlashCardsDbContext dbContext, IMapper mapper, IFi
         {
             query = query.Where(l => l.CreatedById == queryObject.CreatedByIdFilter);
         }
+        else
+        {
+            query = query.Where(l => l.CreatedById != queryObject.CreatedByIdFilter);
+        }
 
         if (queryObject.VisibilityFilter.HasValue)
         {
